@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -23,47 +24,45 @@ import br.com.caelum.tarefas.modelo.Tarefa;
 
 @Controller
 public class TarefasController {
+	
+	private JdbcTarefaDao dao;
+
+    @Autowired
+    public TarefasController(JdbcTarefaDao dao) {
+        this.dao = dao;  
+    }
+
 
 	@ResponseBody
 	@RequestMapping(value = "/adicionaTarefa", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Tarefa adiciona(@Valid Tarefa tarefa) {
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.adiciona(tarefa);
-
 		return tarefa;
 	}
 
 	@ResponseBody
 	@RequestMapping("/listaTarefas")
 	public List<Tarefa> lista() {
-		JdbcTarefaDao dao = new JdbcTarefaDao();
-		List<Tarefa> listaDeTarefas = dao.lista();
-
-		return listaDeTarefas;
+		return dao.lista();
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/removeTarefa", method = RequestMethod.DELETE)
 	public void remove(Tarefa tarefa) {
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.remove(tarefa);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/alteraTarefa", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Tarefa altera(@RequestBody Tarefa tarefa) {
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.altera(tarefa);
-		
 		return tarefa;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/finalizaTarefa", method = RequestMethod.PUT)
 	public Tarefa finaliza(Long id) {
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.finaliza(id);
-		
 		return dao.buscaPorId(id);
 	}
 

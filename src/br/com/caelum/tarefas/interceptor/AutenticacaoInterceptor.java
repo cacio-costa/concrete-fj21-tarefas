@@ -12,7 +12,7 @@ public class AutenticacaoInterceptor extends HandlerInterceptorAdapter {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		String uri = request.getRequestURI();
-        if(uri.endsWith("/login")) {
+        if (uri.endsWith("/login")) {
         	return true;
         }
 

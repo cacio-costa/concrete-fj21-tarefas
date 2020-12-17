@@ -1,5 +1,6 @@
 package br.com.caelum.tarefas.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +12,18 @@ import br.com.caelum.tarefas.seguranca.GerenciadorDeToken;
 
 @Controller
 public class LoginController {
+	
+	private JdbcUsuarioDao dao;
+	
+	@Autowired
+	public LoginController(JdbcUsuarioDao dao) {
+		this.dao = dao;
+	}
+
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<String> login(Usuario usuario) {
-		if (new JdbcUsuarioDao().existeUsuario(usuario)) {
+		if (dao.existeUsuario(usuario)) {
 			GerenciadorDeToken gerenciadorDeToken = new GerenciadorDeToken();
 			String token = gerenciadorDeToken.geraToken(usuario);
 			
